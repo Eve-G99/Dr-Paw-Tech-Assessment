@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.2,
+        shadowOpacity: 0.5,
         shadowRadius: 1,
         elevation: 5,
     },
@@ -96,10 +96,10 @@ const styles = StyleSheet.create({
 
 const ClinicInfoCard = ({ item, userLocation }) => {
     //Pic Placeholder
-    const getRandomImage = () => {
-        const randomInt = Math.floor(Math.random() * 1000);
-        return `https://picsum.photos/id/${randomInt}/100/100`;
-    }
+    // const getRandomImage = () => {
+    //     const randomInt = Math.floor(Math.random() * 1000);
+    //     return `https://picsum.photos/id/${randomInt}/100/100`;
+    // }
 
     const getDistance = () =>{
         latitude = userLocation.coords.latitude
@@ -112,7 +112,7 @@ const ClinicInfoCard = ({ item, userLocation }) => {
         <View style={styles.cardContainer}>
             {/* Image and Info */}
             <View style={styles.imageInfoContainer}>
-                <Image source={{ uri: getRandomImage() }} style={styles.image} />
+                <Image source={require('../cute-puppy.jpg')} style={styles.image} />
                 {/* Info */}
                 <View style={styles.infoContainer}>
                     <Text style={styles.boldText}>{item.name}</Text>

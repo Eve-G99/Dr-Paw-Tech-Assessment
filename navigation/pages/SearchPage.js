@@ -5,9 +5,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import * as Location from 'expo-location';
 import { TouchableOpacity } from 'react-native';
-import SelectDropdown from 'react-native-select-dropdown'
 import ClinicInfoCard from './ClinicInfoCard';
 import getDistanceFromLatLonInKm from '../utils'
+import SelectDropdown from 'react-native-select-dropdown'
 
 const styles = StyleSheet.create({
   container: {
@@ -18,14 +18,11 @@ const styles = StyleSheet.create({
   searchBarContainer: {
     flexDirection: 'row',
     borderColor: '#ccc',
+    height: 40,
     borderWidth: 1,
     borderRadius: 5,
     padding: 4,
     alignItems: 'center',
-  },
-  dropdown: {
-    flex: 0.2,
-    marginRight: 10,
   },
   input: {
     flex: 1,
@@ -35,12 +32,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 10,
   },
-  header: {
+  header:{
+    justifyContent:'flex-start',
+    flexDirection:'row',
+    alignItems:'center',
+    marginBottom:'3%',
+    borderBottomWidth:'0.5',
+    paddingBottom:'3%',
+    borderBottomColor:'#000',
+  },
+  vetHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     fontFamily:'System',
     marginBottom: '5%',
+    marginTop:'2%',
+    marginLeft:'1%',
   },
   buttonFontStyle: {
     fontSize: 14,
@@ -50,7 +58,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#fff',
     padding: 6,
+    paddingLeft: 10,
+    paddingRight: 10,
     borderColor: '#000',
+
   },
 });
 
@@ -58,8 +69,8 @@ export default function SearchPage({navigation}){
     const [input, setInput] = React.useState("");
     const [result, setResult] = React.useState([]);
     const [userLocation, setUserLocation] = React.useState("")
-
-    //
+    
+    // Call API to get Data
     const getAllClinicData = async () => {
       const headers = {
         'Content-Type': 'application/json', 
@@ -78,7 +89,7 @@ export default function SearchPage({navigation}){
       setResult(response.data.documents)
     }
 
-    //
+    // Call API to get User Location
     const getUserLocation = async () => {
       // Permission
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -96,7 +107,7 @@ export default function SearchPage({navigation}){
       getAllClinicData();
     }, [])
 
-    // 
+    // To reset search result
     const onClearPress = () => {
       setInput("");   
       getAllClinicData()      
@@ -180,19 +191,19 @@ export default function SearchPage({navigation}){
       <View style={styles.container}>
         
       {/* Header */}
-        <View justifyContent='flex-start' flexDirection='row' alignItems='center' marginBottom='3%'>
+        <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name="angle-left" size={18} color="black" />
+            <Icon name="angle-left" size={23} color="black" />
           </TouchableOpacity>
-          <Text marginLeft='3%'>Vet Hospital List</Text>
+          <Text marginLeft='3%' style={{fontSize: 18, fontWeight:'bold'}}>Vet Hospital List</Text>
         </View>
 
       {/* Find a Vet */}
-        <View style={styles.header}>
-          <Text>Find a Vet</Text>
-          <View flexDirection='row' alignItems='center'>
+        <View style={styles.vetHeader}>
+          <Text style={{fontSize: 16, fontWeight:'500'}}>Find a Vet</Text>
+          <View flexDirection='row' alignItems='center' borderWidth='1' padding='1%' borderRadius='5'>
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Text marginRight='3%'>Map Version</Text>
+              <Text marginRight='3%'>  Map Version</Text>
             </TouchableOpacity>
             <Icon name="angle-right" size={20} color="black" />
           </View>
@@ -213,19 +224,19 @@ export default function SearchPage({navigation}){
             name="search"
             size={20}
             onPress={onSearchPress}
-            style={styles.searchButton}
+            marginRight='3%'
           />
           <Icon
             name="ban"
             size={20}
             onPress={onClearPress}
-            style={styles.searchButton}
+            marginRight='3%'
           />
         </View>
 
       {/* Explain Text */}
-        <View>
-          <Text>
+        <View marginTop='1%' marginLeft='0.5%' marginBottom='2%'>
+          <Text style={{fontSize: 12}}>
             Enter a location or specific service
           </Text>
         </View>
@@ -262,8 +273,10 @@ export default function SearchPage({navigation}){
             onPress={onSortByDistance}
           />
         </View>
-
-        { result.length !== 0 && (
+        {(userLocation == '' || result.length == 0) && (
+          <Text>Loading now....</Text>
+        )}
+        { userLocation != '' && result.length !== 0 && (
           <FlatList
             data={result}
             renderItem={({ item }) => <ClinicInfoCard item={item} userLocation={userLocation}/>}

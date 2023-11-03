@@ -32,11 +32,11 @@ export default function MainContainer(){
                     if (rn === homepageName) {
                         iconName = focused ? 'home' : 'home-outline'
                     } else if (rn === appointmentpageName){
-                        iconName = focused ? 'videocam' : 'videocam-outline'
+                        iconName = focused ? 'calendar' : 'calendar-outline'
                     } else if (rn === camerapageName){
-                        iconName = focused ? 'videocam' : 'videocam-outline'
+                        iconName = focused ? 'camera' : 'camera-outline'
                     } else if (rn === medipageName){
-                        iconName = focused ? 'help-circle' : 'help-circle-outline'
+                        iconName = focused ? 'medkit' : 'medkit-outline'
                     } else if (rn === searchpageName){
                         iconName = focused ? 'search' : 'search-outline'
                     }
