@@ -302,7 +302,12 @@ export default function SearchPage({navigation}){
           />
         </View>
         {(userLocation == '' || result.length == 0) && (
-          <Text>Loading now....</Text>
+          <View style={{ flex: 1,justifyContent: 'center', alignItems: 'center'
+          }}>
+            <Icon name="spinner" size={30} color="gray" />
+            <Text style={{ marginTop: '5%', fontWeight: 'bold', color: 'gray', fontSize: 20, textAlign: 'center', alignSelf: 'center'
+          }}> Loading now....</Text>
+          </View>
         )}
         { userLocation != '' && result.length !== 0 && (
           <FlatList
