@@ -70,7 +70,7 @@ export default function SearchPage({navigation}){
     const [userLocation, setUserLocation] = React.useState("")
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState(null);
-    const [items, setItems] = React.useState([{label: 'Rating', value: 'rating'}, {label: 'Most Reviewed', value: 'most'}]);
+    const [items, setItems] = React.useState([{label: 'Rate', value: 'rating'}, {label: 'Most', value: 'most'}]);
     
     // Call API to get Data
     const getAllClinicData = async () => {
@@ -111,7 +111,6 @@ export default function SearchPage({navigation}){
 
     // Sort result whenever value change
     React.useEffect(() => {
-      console.log("current value: ",value)
       if (value == 'most'){
         onSortByMostReviewed();
       }else if (value == 'rating'){
@@ -190,25 +189,23 @@ export default function SearchPage({navigation}){
     }
 
     // Filter by Open Now
-    // The following outlines the pseudo-code as placeholder
-    // 1. Get the current time of the user
-      // const currentTime = new Date();
-    // 2. Assuming we have the open and close times for each clinic in a comparable format
-      // clinics.forEach(clinic => {
-      //   const openingTime = new Date(`2023-01-01T${clinic.openingTime}:00`); 
-      //   const closingTime = new Date(`2023-01-01T${clinic.closingTime}:00`);
-    // 3. Check if the clinic is currently open
-      //   if (currentTime > openingTime && currentTime < closingTime) {
-      //     clinic.isOpenNow = true;
-      //   } else {
-      //     clinic.isOpenNow = false;
-      //   }
-      // });
-    // 4. Filter the result list to include only the clinics that are open
-      // const openClinics = clinics.filter(clinic => clinic.isOpenNow);
-
-    //
-    
+      // The following outlines the pseudo-code as placeholder
+      // 1. Get the current time of the user
+        // const currentTime = new Date();
+       // 2. Assuming we have the open and close times for each clinic in a comparable format
+        // clinics.forEach(clinic => {
+        //   const openingTime = new Date(`2023-01-01T${clinic.openingTime}:00`); 
+        //   const closingTime = new Date(`2023-01-01T${clinic.closingTime}:00`);
+      // 3. Check if the clinic is currently open
+        //   if (currentTime > openingTime && currentTime < closingTime) {
+        //     clinic.isOpenNow = true;
+        //   } else {
+        //     clinic.isOpenNow = false;
+        //   }
+        // });
+      // 4. Filter the result list to include only the clinics that are open
+        // const openClinics = clinics.filter(clinic => clinic.isOpenNow);
+   
     console.log("render")
 
     return(
@@ -276,9 +273,10 @@ export default function SearchPage({navigation}){
             setValue={setValue}
             setItems={setItems}
             zIndex={0}
-            containerStyle={{width: '22%',}}
+            containerStyle={{width: '24%', }}
             textStyle={styles.buttonFontStyle}
-            style={{minHeight:"5%"}}          
+            style={{minHeight:"5%"}} 
+            selectedItemLabelStyle={{fontWeight: "600"}}    
           />
           <Button
             title="Vet Hospital"
