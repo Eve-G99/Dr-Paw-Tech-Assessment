@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TextInput, FlatList } from 'react-native';
-import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import axios from 'axios';
 import * as Location from 'expo-location';
-import { TouchableOpacity } from 'react-native';
+import axios from 'axios';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import ClinicInfoCard from './ClinicInfoCard';
 import getDistanceFromLatLonInKm from '../utils'
-import SelectDropdown from 'react-native-select-dropdown'
+import DropDownPicker from 'react-native-dropdown-picker';
+import { Text, View, StyleSheet, TextInput, FlatList } from 'react-native';
+import { Button } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     borderColor: '#000',
-
   },
 });
 
@@ -69,6 +68,9 @@ export default function SearchPage({navigation}){
     const [input, setInput] = React.useState("");
     const [result, setResult] = React.useState([]);
     const [userLocation, setUserLocation] = React.useState("")
+    const [open, setOpen] = React.useState(false);
+    const [value, setValue] = React.useState(null);
+    const [items, setItems] = React.useState([{label: 'Rating', value: 'rating'}, {label: 'Most Reviewed', value: 'most'}]);
     
     // Call API to get Data
     const getAllClinicData = async () => {
@@ -107,10 +109,21 @@ export default function SearchPage({navigation}){
       getAllClinicData();
     }, [])
 
+    // Sort result whenever value change
+    React.useEffect(() => {
+      console.log("current value: ",value)
+      if (value == 'most'){
+        onSortByMostReviewed();
+      }else if (value == 'rating'){
+        onSortByRatingsPress()
+      }
+    }, [value])
+
     // To reset search result
     const onClearPress = () => {
       setInput("");   
-      getAllClinicData()      
+      getAllClinicData() 
+      setValue(null);
     }
 
     const onChangeText = async (text) => {
@@ -138,6 +151,16 @@ export default function SearchPage({navigation}){
         ratingOfA = a.rating.$numberDouble? a.rating.$numberDouble : a.rating.$numberInt
         ratingOfB = b.rating.$numberDouble? b.rating.$numberDouble : b.rating.$numberInt
         return ratingOfB - ratingOfA
+      });
+      setResult(newResult)
+    }
+    
+    // Sort by Rating
+    const onSortByMostReviewed = () =>{
+      newResult = [...result].sort((a, b) => {
+        countOfA = a.user_ratings_total.$numberInt
+        countOfB = b.user_ratings_total.$numberInt
+        return countOfB - countOfA
       });
       setResult(newResult)
     }
@@ -184,7 +207,8 @@ export default function SearchPage({navigation}){
     // 4. Filter the result list to include only the clinics that are open
       // const openClinics = clinics.filter(clinic => clinic.isOpenNow);
 
-
+    //
+    
     console.log("render")
 
     return(
@@ -242,13 +266,19 @@ export default function SearchPage({navigation}){
         </View>
         
       {/* Filters Row */}
-        <View flexDirection='row' justifyContent='space-between' marginTop='2%' marginBottom='5%'>
-          <Button
-            title="Sort by"  // ratings
-            type="outline"
-            titleStyle={styles.buttonFontStyle}
-            buttonStyle={styles.buttonStyle}
-            onPress={onSortByRatingsPress}
+        <View flexDirection='row' justifyContent='space-between' alignItems='center' marginTop='2%' marginBottom='5%'>
+          <DropDownPicker
+            placeholder='Sort'
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            zIndex={0}
+            containerStyle={{width: '22%',}}
+            textStyle={styles.buttonFontStyle}
+            style={{minHeight:"5%"}}          
           />
           <Button
             title="Vet Hospital"
@@ -278,6 +308,7 @@ export default function SearchPage({navigation}){
         )}
         { userLocation != '' && result.length !== 0 && (
           <FlatList
+            zIndex={-1}
             data={result}
             renderItem={({ item }) => <ClinicInfoCard item={item} userLocation={userLocation}/>}
           />

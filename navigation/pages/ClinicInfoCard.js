@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, Share } from 'react-native';
+import { View, Text, StyleSheet, Image} from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import getDistanceFromLatLonInKm from '../utils';
