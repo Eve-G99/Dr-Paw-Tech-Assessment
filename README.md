@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Hi, welcome! This project contains the codebase for a two-days technical assessment as part of the Developer Internship evaluation. It serves as a directory app, helping users locate and learn about nearby Animal Hospitals and Vet Clinics.
+This project contains the codebase for a two-days technical assessment as part of the Developer Internship evaluation. It serves as a directory app, helping users locate and learn about nearby Animal Hospitals and Vet Clinics.
 
 ## Features
 
